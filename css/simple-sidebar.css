@@ -1,0 +1,242 @@
+/*!
+ * Start Bootstrap - Simple Sidebar (https://startbootstrap.com/template-overviews/simple-sidebar)
+ * Copyright 2013-2017 Start Bootstrap
+ * Licensed under MIT (https://github.com/BlackrockDigital/startbootstrap-simple-sidebar/blob/master/LICENSE)
+ */
+
+body {
+    overflow-x: hidden;
+    color: white;
+    height: 100%;
+    background-color: #17052B;
+    font-family: 'Roboto Condensed', sans-serif;
+}
+
+#wrapper {
+    padding-left: 0;
+    -webkit-transition: all 0.5s ease;
+    -moz-transition: all 0.5s ease;
+    -o-transition: all 0.5s ease;
+    transition: all 0.5s ease;
+}
+
+#wrapper.toggled {
+    padding-left: 250px;
+}
+
+#sidebar-wrapper {
+    padding-top: 15px;
+    background-color: #17052B;
+    z-index: 1000;
+    position: fixed;
+    left: 250px;
+    width: 0;
+    height: 100%;
+    margin-left: -250px;
+    overflow-y: auto;
+    -webkit-transition: all 0.5s ease;
+    -moz-transition: all 0.5s ease;
+    -o-transition: all 0.5s ease;
+    transition: all 0.5s ease;
+}
+
+#wrapper.toggled #sidebar-wrapper {
+    width: 100%;
+}
+
+#page-content-wrapper {
+    width: 100%;
+    position: absolute;
+    padding: 15px;
+}
+
+#wrapper.toggled #page-content-wrapper {
+    position: absolute;
+    margin-right: -250px;
+}
+
+@media (min-width: 768px) {
+    #wrapper {
+        padding-left: 0;
+    }
+    #wrapper.toggled {
+        padding-left: 250px;
+    }
+    #sidebar-wrapper {
+        width: 0;
+    }
+    #wrapper.toggled #sidebar-wrapper {
+        width: 100%;
+    }
+    #page-content-wrapper {
+        padding: 20px;
+        position: relative;
+    }
+    #wrapper.toggled #page-content-wrapper {
+        position: relative;
+        margin-right: 0;
+    }
+}
+
+.btn {
+    background-color: rgba(0, 0, 0, 0);
+    border-color: #fff;
+    color: #fff;
+}
+
+.btn:hover {
+    color: #000;
+    background-color: #fff;
+}
+
+.brand {
+    margin: 0;
+    font-family: 'Anton', sans-serif;
+}
+
+.search-form {
+    margin-top: 20px;
+}
+
+.search-form input[type=text] {
+    background-color: rgba(0, 0, 0, 0);
+    color: #fff;
+}
+
+.song-list {
+    list-style-type: none;
+    padding-left: 0;
+    overflow: auto;
+    margin-top: 20px;
+    padding-right: 1px;
+}
+
+.song-list-item {
+    background-color: rgba( 0, 0, 0, 0);
+    padding: 5px;
+    color: #fff;
+    margin-bottom: 5px;
+    border: solid thin #fff;
+    border-radius: 5px;
+}
+
+.song-list-item .btn {
+    background-color: rgba( 0, 0, 0, 0);
+    color: #fff;
+    border-color: #fff;
+}
+
+.song-list-item .btn:hover {
+    background-color: #fff;
+    color: #000;
+}
+
+.song-list-title {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.btn-default .badge {
+    color: #000;
+    background-color: #fff;
+    top: -2px;
+}
+
+.tab-name {
+    font-size: 20px;
+}
+
+.loader {
+    /* Uncomment this to make it run! */
+    /*
+       animation: loader 5s linear infinite;
+    */
+    position: absolute;
+    top: calc(50% - 20px);
+    left: calc(50% - 20px);
+}
+
+.loader-text {
+    text-align: center;
+    margin-top: 20%;
+}
+
+@keyframes loader {
+    0% {
+        left: -100px
+    }
+    100% {
+        left: 110%;
+    }
+}
+
+.box {
+    width: 50px;
+    height: 50px;
+    background: #fff;
+    animation: animate .5s linear infinite;
+    position: absolute;
+    top: 0;
+    left: 0;
+    border-radius: 3px;
+}
+
+@keyframes animate {
+    17% {
+        border-bottom-right-radius: 3px;
+    }
+    25% {
+        transform: translateY(9px) rotate(22.5deg);
+    }
+    50% {
+        transform: translateY(18px) scale(1, .9) rotate(45deg);
+        border-bottom-right-radius: 40px;
+    }
+    75% {
+        transform: translateY(9px) rotate(67.5deg);
+    }
+    100% {
+        transform: translateY(0) rotate(90deg);
+    }
+}
+
+.shadow {
+    width: 50px;
+    height: 5px;
+    background: #fff;
+    opacity: 0.1;
+    position: absolute;
+    top: 59px;
+    left: 0;
+    border-radius: 50%;
+    animation: shadow .5s linear infinite;
+}
+
+@keyframes shadow {
+    50% {
+        transform: scale(1.2, 1);
+    }
+}
+
+.logo {
+    width: 280px;
+    margin-top: 100px;
+}
+
+/* Scroll bar */
+/* Width */
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 5px #fff;
+    border-radius: 5px;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: #fff;
+    border-radius: 2px;
+}

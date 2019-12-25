@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="Online Videoke">
+    <meta name="author" content="EJ Perez">
+
+    <title>Youtubeoke Dual | Online Videoke</title>
+
+    <!-- Bootstrap core CSS -->
+    <!--<link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">-->
+    <link rel="icon" type="image/png" href="images/logo.png" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+    <link href="https://fonts.googleapis.com/css?family=Anton|Roboto+Condensed" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="css/simple-sidebar.css" rel="stylesheet">
+
+    <style>
+        .overlay {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            background-color: #17052B;
+            z-index: 1;
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <div id="wrapper" v-bind:class="{ toggled : !isPlayer }">
+
+        <div class="overlay" v-if="showOverlay">
+            <div class="loader">
+                <div class="shadow"></div>
+                <div class="box"></div>
+            </div>
+            <h1 class="loader-text">Welcome great singers!</h1>
+        </div>
+
+        <!-- Sidebar -->
+        <div id="sidebar-wrapper" v-if="!isPlayer">
+
+            <div v-if="isLoading" class="loader">
+                <div class="shadow"></div>
+                <div class="box"></div>
+            </div>
+
+            <div v-if="!isLoading" class="container-fluid">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="btn-group btn-group-justified" role="group" aria-label="...">
+                            <div class="btn-group" role="group" aria-label="...">
+                                <button v-on:click="showTab( 1 )" type="button" class="btn btn-lg btn-default"
+                                    v-bind:class="{ active : activeTab === 1 }" title="Search">
+                                    <span class="glyphicon glyphicon-search"></span></button>
+                            </div>
+                            <div class="btn-group" role="group" aria-label="...">
+                                <button v-on:click="showTab( 2 )" type="button" class="btn btn-lg btn-default"
+                                    v-bind:class="{ active : activeTab === 2 }" title="Playlist"><span class="glyphicon glyphicon-list"></span>
+                                    <span class="badge">{{ playlist.length }}</span></button>
+                            </div>
+                            <div class="btn-group" role="group" aria-label="...">
+                                <button v-on:click="showPlayerTab()" type="button" class="btn btn-lg btn-default" title="Show player tab"><span
+                                        class="glyphicon glyphicon-play"></span></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12" v-bind:class="{ hide: activeTab !== 1}">
+                        <form class="form search-form" v-on:submit.prevent="searchSong">
+                            <fieldset>
+                                <div class="input-group">
+                                    <input v-model="formData.q" type="text" class="form-control" placeholder="Search for...">
+                                    <span class="input-group-btn"><button class="btn btn-default">Go!
+                                        </button></span>
+                                </div>
+                            </fieldset>
+                        </form>
+                    </div>
+                    <div class="col-md-12" v-bind:class="{ hide: activeTab !== 1}">
+                        <ul id="js-search-list" class="song-list" v-if="searchResults.length" v-bind:style="{ height : searchListHeight + 'px' }">
+                            <li class="song-list-item" v-for="item in searchResults">
+                                <div class="container-fluid">
+                                    <div class="col-sm-4">
+                                        <img class="img-responsive song-list-image" v-bind:src="item.image" alt="" width="220" height="147" />
+                                    </div>
+
+                                    <div class="col-sm-8">
+                                        <h3 class="song-list-title">{{ item.title }}</h3>
+                                        <sup>{{ item.channel }}</sup>
+                                        <div>
+                                            <button class="btn btn-sm" v-on:click="addToPlaylist( item )">Add to playlist</button>
+                                            <button class="btn btn-sm" v-on:click="playSong( item )">Play</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+
+                        <p v-else><br>No songs.</p>
+                    </div>
+                    <div class="col-md-12" v-bind:class="{ hide: activeTab !== 2}">
+                        <ul id="js-play-list" class="song-list" v-if="playlist.length" v-bind:style="{ height : playListHeight + 'px' }">
+                            <li class="song-list-item" v-for="(item, index) in playlist">
+                                <div class="container-fluid">
+                                    <div class="col-sm-4">
+                                        <img class="img-responsive song-list-image" v-bind:src="item.image" alt="" width="220"
+                                            height="147" />
+                                    </div>
+
+                                    <div class="col-sm-8">
+                                        <h3 class="song-list-title">{{ item.title }}</h3>
+                                        <sup>{{ item.channel }}</sup>
+                                        <div>
+                                            <button class="btn btn-sm" v-on:click="playSongFromPlaylist( item, index )">Play</button>
+                                            <button class="btn btn-sm" v-on:click="deleteSong( index )">Delete</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                        <p v-else><br>No songs.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /#sidebar-wrapper -->
+
+        <!-- Page Content -->
+        <div id="page-content-wrapper" v-if="isPlayer">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-12 text-center">
+                        <template v-if="!currentSong">
+                            <div>
+                                <img class="logo" src="images/logo_trans.png" alt="" v-bind:style="{ marginTop : logoMarginTop + 'px' }">
+                                <h1 class="brand">Youtubeoke</h1>
+                            </div>
+                        </template>
+                        <p v-if="currentSong">Now playing | <strong>{{ currentSong.title }}</strong></p>
+                        <p v-else>Search or select a song to begin.</p>
+                    </div>
+                    <div class="col-md-12">
+                        <div v-bind:class="{ hide: !showPlayer }" class="embed-responsive embed-responsive-16by9">
+                            <div id="player"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /#page-content-wrapper -->
+
+    </div>
+    <!-- /#wrapper -->
+
+    <script src="https://www.youtube.com/iframe_api"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="js/main.js"></script>
+
+</body>
+
+</html>
